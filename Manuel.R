@@ -407,4 +407,4 @@ manuel <- checkboxInput(inputId = 'atn2_25',
                        value = NA_integer_),
             numericInput(inputId = 'atn2_56e', #se modifica a numericInput
                        label = 'Número de enfermeros que brindan el servicio', 
-                       value = NA_integer_),
+                       value = NA_integer_)
