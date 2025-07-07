@@ -460,7 +460,7 @@ manuel2 <- checkboxInput(inputId = 'atn2_57',
             #selectInput(inputId = 'atn2_73m',
             #           label = 'Número de médicos prestando servicio',
             #           value = NA_integer_),
-            selectInput(inputId = 'atn2_73e',
+            numericInput(inputId = 'atn2_73e',
                        label = '¿Cuántas personas integran el equipo multidisciplinario que trabaja en el servicio?', 
                        value = NA_integer_)
 
