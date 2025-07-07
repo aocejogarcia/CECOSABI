@@ -467,7 +467,7 @@ manuel2 <- checkboxInput(inputId = 'atn2_57',
 
 #Auxiliares diagnóstico y tratamiento
 
-aparatos <- checkboxInput(inputId = 'atn2_60', 
+equipo <- checkboxInput(inputId = 'atn2_60', 
                         label = 'Radiodiagnóstico',
                          value = F), 
            selectInput(inputId = 'atn2_60i', 
