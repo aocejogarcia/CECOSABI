@@ -449,10 +449,13 @@ ale <- column(12,
             selectInput(inputId = 'atn2_26i', 
                        label = '¿Cuenta con la infraestructura para operar el servicio?', 
                        choices = c('Si', 'No', 'Parcial', 'NA'), 
-                       selected = 'NA'),  
+                       selected = 'NA') 
 
+                                 
+)
+
+ale2 <- column(12,
 #Oficinas directivas administrativas
-
             checkboxInput(inputId = 'atn2_27', 
                          label = 'Gobierno', 
                          value = F),  
@@ -483,9 +486,7 @@ ale <- column(12,
             checkboxInput(inputId = 'atn2_36', 
                          label = 'Informática', 
                          value = F),                                  
-
 #OTRAS
-
             checkboxInput(inputId = 'atn2_37', 
                          label = 'Mortuorio', 
                          value = F),       
@@ -506,5 +507,6 @@ ale <- column(12,
                          value = F),   
             checkboxInput(inputId = 'atn2_43', 
                          label = 'Dormitorios', 
-                         value = F)                                  
-)
+                         value = F) 
+
+              )
