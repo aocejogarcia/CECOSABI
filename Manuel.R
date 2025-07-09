@@ -735,5 +735,5 @@ checkboxInput(inputId = 'atn2_82',
                        value = NA_integer_), 
             numericInput(inputId = 'atn2_85nf', 
                        label = '¿Cuánto equipo no es funcional?',
-                       value = NA_integer_),
+                       value = NA_integer_)
                  )
