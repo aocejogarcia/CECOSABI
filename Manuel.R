@@ -316,7 +316,9 @@ checkboxInput(inputId = 'atn2_61',
                        label = '¿Cuenta con el equipo para operar el servicio?', 
                        choices = c('Si', 'No', 'Parcial', 'NA'), 
                        selected = 'NA'),
+#####################################SE EDITÓ ESTA VARIABLE NUMERO 63######################################
 
+                 
            checkboxInput(inputId = 'atn2_63',
                         label = 'Cirugía plástica',
                          value = F), 
@@ -739,7 +741,7 @@ checkboxInput(inputId = 'atn2_82',
                        
                        
  ###Servicios faltantes############################################################################################################################################
-
+### SE AÑADIERON ESTAS NUEVAS VARIABLES#######################################################################################################
             checkboxInput(inputId = 'atn2_86', 
                         label = 'Estimulación temprana',
                          value = F),
