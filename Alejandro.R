@@ -519,7 +519,7 @@ ale2 <- column(12,
 ###### PARQUE VEHICULAR  ------------------------------------
 #############################################################
 
-            checkboxInput(inputId = 'pve_86', 
+ale3 <- column(12, checkboxInput(inputId = 'pve_86', 
                          label = 'Ambulancia', 
                          value = F),
             numericInput(inputId = 'pve_86fu', 
@@ -587,14 +587,14 @@ ale2 <- column(12,
                        value = NA_integer_), 
             numericInput(inputId = 'pve_94nf', 
                        label = '¿Cuanto equipo no es funcional?',
-                       value = NA_integer_),  
-
+                       value = NA_integer_)  
+)
 #########################################################################################################################################################################################################
 ###### EQUIPAMIENTO  ----------------------------------------
 #########################################################################################################################################################################################################
 
 
-            checkboxInput(inputId = 'atn2_95', 
+ale4 <- column(12, checkboxInput(inputId = 'atn2_95', 
                          label = 'Torre laparoscopía', 
                          value = F), 
             selectInput(inputId = 'atn2_95sr', 
@@ -700,4 +700,5 @@ ale2 <- column(12,
                        value = NA_integer_), 
             numericInput(inputId = 'atn2_104nf', 
                        label = '¿Cuanto equipo no es funcional?',
-                        value = NA_integer_),
+                        value = NA_integer_)
+)
