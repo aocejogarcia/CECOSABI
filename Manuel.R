@@ -737,7 +737,7 @@ checkboxInput(inputId = 'atn2_82',
                        value = NA_integer_), 
             numericInput(inputId = 'atn2_85nf', 
                        label = '¿Cuánto equipo no es funcional?',
-                       value = NA_integer_)
+                       value = NA_integer_),
                        
                        
  ###Servicios faltantes############################################################################################################################################
@@ -833,4 +833,5 @@ checkboxInput(inputId = 'atn2_82',
             selectInput(inputId = 'atn2_86i', 
                        label = '¿Cuenta con el insumo para operar el servicio?', 
                        choices = c('Si', 'No', 'Parcial', 'NA'), 
-                       selected = 'NA'),
+                       selected = 'NA')
+)
