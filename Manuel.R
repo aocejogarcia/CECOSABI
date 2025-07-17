@@ -1,6 +1,6 @@
 #Tabla descriptiva de los servicios existentes
 ##################################################################################################
-####################################################ACTUALIZACIÓN 08/07/2025######################
+####################################################ACTUALIZACIÓN 17/07/2025######################
 ##################################################################################################
 
 manuel <- column(12,
@@ -358,14 +358,11 @@ checkboxInput(inputId = 'atn2_61',
 
 
            checkboxInput(inputId = 'atn2_65', 
-                        label = 'Estomatología', 
+                        label = 'Clínica de Heridas y Estomas', 
                          value = F), 
-              numericInput(inputId = 'atn2_65od',
-                       label = 'Número de odontólogos que brindan el servicio?',
+              numericInput(inputId = 'atn2_65me',
+                       label = 'Número de Médicos especialistas que brindan el servicio?',
                        value = NA_integer_), 
-            numericInput(inputId = 'atn2_65me',
-                       label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
-                       value = NA_integer_),
             numericInput(inputId = 'atn2_65m',
                        label = '¿Cuántos médicos generales trabajan en el servicio?', 
                        value = NA_integer_),
