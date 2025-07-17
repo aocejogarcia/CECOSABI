@@ -126,7 +126,7 @@ ui <- dashboardPage(skin = 'red',
                                   div(
                                     id = "2do y 3er nivel",
                                     h3(tags$b('Servicios de Atencion')),
-                                    fluidRow(ale, ale2, manuel
+                                    fluidRow(ale, ale2, ale3, manuel, ale4
                                       )
                                   ),
                                   actionButton("submit", "Enviar", class = "btn-primary"),
