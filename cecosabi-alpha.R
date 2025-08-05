@@ -1,0 +1,2878 @@
+
+##División de preguntas por columna
+library(tidyverse)
+library(shiny)
+library(shinydashboard)
+library(shinylive)
+library(dplyr)
+library(shinyjs)
+
+##Nivel de atención
+niv <- fluidRow(
+  column(4, wellPanel(
+selectInput(inputId = 'atn_01', 
+            label = 'Nivel de atención', 
+            choices = c('Primer', 'Segundo', 'Tercer', 'NA'), 
+            selected = 'NA')
+))
+)
+#Condicional (primero cargar los objetos de abajo)
+cond1 <- conditionalPanel(
+  condition = "input.atn_01 == 'Segundo'",
+  c(a2, b2, c2)
+)
+
+cond2 <- conditionalPanel(
+  condition = "input.atn_01 == 'Tercer'",
+  c(a3, b3, c3)
+)
+
+######AQUÍ COMIENZAN LAS PREGUNTAS
+###Consulta externa----
+a <- list(
+  h4(tags$b('Consulta externa')),
+  fluidRow(
+  column(6, wellPanel(
+    checkboxInput(inputId = 'atn2_01', 
+                  label = 'Consulta externa', 
+                  value = F), 
+    numericInput(inputId = 'atn2_01m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_01e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_01ieq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    selectInput(inputId = 'atn2_01i', 
+                label = '¿Cuenta con el insumo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'),       
+                selected = 'NA')
+  )),
+  column(6, wellPanel(
+    checkboxInput(inputId = 'atn2_02', 
+                  label = 'Consulta externa de especialidades', 
+                  value = F),   
+    numericInput(inputId = 'atn2_02me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_02m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_02e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_02eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_02fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_02nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+)
+)
+
+###Según instalaciones----
+b <- list( 
+  h4(tags$b('Según instalaciones')),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_49', 
+                  label = 'Trabajo social', 
+                  value = F), 
+    selectInput(inputId = 'atn2_49eq',
+                label = '¿Cuenta con el insumo para operar el servicio?',
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_49t',  
+                 label = '¿Cuántos trabajadores sociales trabajan en este servicio?', 
+                 value = NA_integer_),
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_03', 
+                  label = 'Laboratorio clínico', 
+                  value = F), 
+    numericInput(inputId = 'atn2_03q',
+                 label = '¿Cuántos químicos trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_03qmi',
+                 label = '¿Cuántos microscopistas trabajan en el servicio?', 
+                 value = NA_integer_),                       
+    numericInput(inputId = 'atn2_03me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_03e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_03eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_03fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_03nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_04', 
+                  label = 'Farmacia', 
+                  value = F), 
+    numericInput(inputId = 'atn2_04pm', 
+                 label = 'Total de personal que integra el equipo multidisciplinario que trabaja en el servicio (Equipo de salud que incluye farmacéuticos, técnicos de farmacia, supervisor de inventario, etc.)', 
+                 value = NA_integer_), 
+    selectInput(inputId = 'atn2_04i', 
+                label = '¿Cuenta con el insumo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA') 
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_05', 
+                  label = 'Telemedicina',
+                  value = F), 
+    numericInput(inputId = 'atn2_05m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_05e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_05pc',
+                 label = 'Total de personal capacitado que puede brindar el servicio', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_05eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_05fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_05nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)  
+  ))
+),
+    fluidRow(
+      column(3, wellPanel(
+        checkboxInput(inputId = 'atn2_06', 
+                      label = 'Urgencias', 
+                      value = F), 
+        numericInput(inputId = 'atn2_06me',
+                     label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_06m',
+                     label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_06e',
+                     label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                     value = NA_integer_),       
+        selectInput(inputId = 'atn2_06tr', 
+                    label = '¿Cuenta con área de triage?', 
+                    choices = c('Si', 'No', 'Parcial', 'NA'), 
+                    selected = 'NA'), 
+        numericInput(inputId = 'atn2_06cam', 
+                     label = 'En área de observación ¿Con cuántas camas censables se cuentan en el servicio? (independientemente de si actualmente se encuentran o no ocupadas)',
+                     value = NA_integer_),                                                              
+        numericInput(inputId = 'atn2_06ch', 
+                     label = '¿Cuántas salas de reanimación/choque hay en el servicio?(independientemente de si actualmente se encuentran o no ocupadas)',
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_06ais', 
+                     label = '¿Cuántas salas aisladas hay en el servicio? (independientemente de si actualmente se encuentran o no ocupadas)',
+                     value = NA_integer_)
+      )),
+      column(3, wellPanel(
+        checkboxInput(inputId = 'atn2_07', 
+                      label = 'Servicios de sangre',
+                      value = F), 
+        numericInput(inputId = 'atn2_07me',
+                     label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_07m',
+                     label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_07e',
+                     label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_07pm',
+                     label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio',
+                     value = NA_integer_),                       
+        selectInput(inputId = 'atn2_07eq', 
+                    label = '¿Cuenta con el equipo para operar el servicio?', 
+                    choices = c('Si', 'No', 'Parcial', 'NA'), 
+                    selected = 'NA'),
+        numericInput(inputId = 'atn2_07fu', 
+                     label = '¿Cuánto equipo es funcional?',
+                     value = NA_integer_), 
+        numericInput(inputId = 'atn2_07nf', 
+                     label = '¿Cuánto equipo no es funcional?',
+                     value = NA_integer_)
+      )),
+      column(3, wellPanel(
+        checkboxInput(inputId = 'atn2_08', 
+                      label = 'Área de hospitalización', 
+                      value = F), 
+        numericInput(inputId = 'atn2_08me',
+                     label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_08m',
+                     label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_08e',
+                     label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_08op',
+                     label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (camilleros, intendencia, auxiuliares, etc)', 
+                     value = NA_integer_),                       
+        selectInput(inputId = 'atn2_08eq', 
+                    label = '¿Cuenta con el equipo para operar el servicio?', 
+                    choices = c('Si', 'No', 'Parcial', 'NA'), 
+                    selected = 'NA'),
+        numericInput(inputId = 'atn2_08cam', 
+                     label = '¿Cuál es el total de camas censables disponibles en el servicio? (independientemente de si actualmente se encuentran o no ocupadas)',
+                     value = NA_integer_)
+      )),
+      column(3, wellPanel(
+        checkboxInput(inputId = 'atn2_11', 
+                      label = 'Área de recuperación', 
+                      value = F), 
+        numericInput(inputId = 'atn2_11me',
+                     label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                     value = NA_integer_),                         
+        numericInput(inputId = 'atn2_11m',
+                     label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_11e',
+                     label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                     value = NA_integer_),
+        numericInput(inputId = 'atn2_11op',
+                     label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio', 
+                     value = NA_integer_),                       
+        selectInput(inputId = 'atn2_11eq', 
+                    label = '¿Cuenta con el equipo para operar el servicio?', 
+                    choices = c('Si', 'No', 'Parcial', 'NA'), 
+                    selected = 'NA'),
+        numericInput(inputId = 'atn2_11cam', 
+                     label = '¿Cuál es el total de camas censables disponibles en el servicio? (independientemente de si actualmente se encuentran o no ocupadas)',
+                     value = NA_integer_)  
+      ))
+    ),
+        fluidRow(
+        column(3, wellPanel(
+          checkboxInput(inputId = 'atn2_09', 
+                        label = 'Central de Esterilización y Equipos (CEYE)', 
+                        value = F), 
+          numericInput(inputId = 'atn2_09m',
+                       label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                       value = NA_integer_),
+          numericInput(inputId = 'atn2_09e',
+                       label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                       value = NA_integer_),
+          numericInput(inputId = 'atn2_09op',
+                       label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (técnicos, radiólogos, etc.)', 
+                       value = NA_integer_),                       
+          selectInput(inputId = 'atn2_09eq', 
+                      label = '¿Cuenta con el equipo para operar el servicio?', 
+                      choices = c('Si', 'No', 'Parcial', 'NA'), 
+                      selected = 'NA')  
+        )),
+        column(3, wellPanel(
+          checkboxInput(inputId = 'atn2_10', 
+                        label = 'Quirófano', 
+                        value = F), 
+          numericInput(inputId = 'atn2_10me',
+                       label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                       value = NA_integer_),                         
+          numericInput(inputId = 'atn2_10m',
+                       label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                       value = NA_integer_),
+          numericInput(inputId = 'atn2_10e',
+                       label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                       value = NA_integer_),
+          numericInput(inputId = 'atn2_10op',
+                       label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (técnicos, radiólogos, etc.)', 
+                       value = NA_integer_),                       
+          selectInput(inputId = 'atn2_10eq', 
+                      label = '¿Cuenta con el equipo para operar el servicio?', 
+                      choices = c('Si', 'No', 'Parcial', 'NA'), 
+                      selected = 'NA'),
+          numericInput(inputId = 'atn2_10q', 
+                       label = '¿Cuál es el total quirófanos disponibles en el servicio? (independientemente de si actualmente se encuentran o no ocupados)',
+                       value = NA_integer_)   
+        )),
+        column(3, wellPanel(
+          checkboxInput(inputId = 'atn2_12', 
+                        label = 'Tococirugía (Labor, expulsión y recuperación)', 
+                        value = F), 
+          numericInput(inputId = 'atn2_12me',
+                       label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                       value = NA_integer_),                         
+          numericInput(inputId = 'atn2_12m',
+                       label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                       value = NA_integer_),
+          numericInput(inputId = 'atn2_12e',
+                       label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                       value = NA_integer_),
+          numericInput(inputId = 'atn2_12op',
+                       label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio', 
+                       value = NA_integer_),                       
+          selectInput(inputId = 'atn2_12eq', 
+                      label = '¿Cuenta con el equipo para operar el servicio?', 
+                      choices = c('Si', 'No', 'Parcial', 'NA'), 
+                      selected = 'NA'),
+          numericInput(inputId = 'atn2_12q', 
+                       label = '¿Cuál es el total de quirófanos disponibles en el servicio? (independientemente de si actualmente se encuentran o no ocupadas)',
+                       value = NA_integer_)
+        )),
+        column(3, wellPanel(
+          checkboxInput(inputId = 'atn2_13', 
+                        label = 'Unidad de quemados', 
+                        value = F), 
+          numericInput(inputId = 'atn2_13me',
+                       label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                       value = NA_integer_),                         
+          numericInput(inputId = 'atn2_13m',
+                       label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                       value = NA_integer_),
+          numericInput(inputId = 'atn2_13e',
+                       label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                       value = NA_integer_),
+          numericInput(inputId = 'atn2_13op',
+                       label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio', 
+                       value = NA_integer_),                       
+          selectInput(inputId = 'atn2_13eq', 
+                      label = '¿Cuenta con el equipo para operar el servicio?', 
+                      choices = c('Si', 'No', 'Parcial', 'NA'), 
+                      selected = 'NA'),
+          numericInput(inputId = 'atn2_13ch', 
+                       label = '¿Cuántas salas de reanimación/choque hay en el servicio?(independientemente de si actualmente se encuentran o no ocupadas)',
+                       value = NA_integer_) 
+        ))
+      ),
+     fluidRow(
+          column(3, wellPanel(
+            checkboxInput(inputId = 'atn2_14', 
+                          label = 'Unidad de trasplantes',  
+                          value = F), 
+            numericInput(inputId = 'atn2_14me',
+                         label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                         value = NA_integer_),                         
+            numericInput(inputId = 'atn2_14m',
+                         label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                         value = NA_integer_),
+            numericInput(inputId = 'atn2_14e',
+                         label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                         value = NA_integer_),
+            numericInput(inputId = 'atn2_14op',
+                         label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio', 
+                         value = NA_integer_),                       
+            selectInput(inputId = 'atn2_14eq', 
+                        label = '¿Cuenta con el equipo para operar el servicio?', 
+                        choices = c('Si', 'No', 'Parcial', 'NA'), 
+                        selected = 'NA'),
+            numericInput(inputId = 'atn2_14q', 
+                         label = '¿Cuál es el total de quirófanos disponibles en el servicio? (independientemente de si actualmente se encuentran o no ocupadas)',
+                         value = NA_integer_),            
+            numericInput(inputId = 'atn2_14qt', 
+                         label = '¿Cuál es el total de unidades de cuidados intensivos disponibles en el servicio? (independientemente de si actualmente se encuentran o no ocupadas)', 
+                         value = NA_integer_)  
+          )),
+          column(3, wellPanel(
+            checkboxInput(inputId = 'atn2_15',                          
+                          label = 'Almacén', 
+                          value = F), 
+            numericInput(inputId = 'atn2_15pm', 
+                         label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (Equipo de salud que incluye farmacéuticos, técnicos de almacén, supervisor de inventario, etc.)', 
+                         value = NA_integer_), 
+            selectInput(inputId = 'atn2_15carg', 
+                        label = '¿Cuenta zona de carga y descarga?', 
+                        choices = c('Si', 'No', 'NA'), 
+                        selected = 'NA'),
+            selectInput(inputId = 'atn2_15ah', 
+                        label = '¿El almacén se encuentra dentro del hospital?', 
+                        choices = c('Si', 'No', 'NA'), 
+                        selected = 'NA'),   
+            textInput(inputId = 'atn2_15d', 
+                      label = 'En qué dirección se encuentra el almacén (calle, número, colonia, municipio, estado)', 
+                      value = NA_character_)
+          )),
+          column(3, wellPanel(
+            checkboxInput(inputId = 'atn2_23', 
+                          label = 'Vigilancia y seguridad', 
+                          value = F), 
+            numericInput(inputId = 'atn2_23pm', 
+                         label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio', 
+                         value = NA_integer_) 
+          )),
+          column(3, wellPanel(
+            checkboxInput(inputId = 'atn2_16', 
+                          label = 'Conservación y mantenimiento',
+                          value = F), 
+            numericInput(inputId = 'atn2_16pm', 
+                         label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (Equipo de salud que incluye ingenieros, técnicos de mantenimiento, etc.)',
+                         value = NA_integer_)
+          ))
+        ),
+    fluidRow(
+          column(3, wellPanel(
+            checkboxInput(inputId = 'atn2_22', 
+                          label = 'Intendencia', 
+                          value = F), 
+            numericInput(inputId = 'atn2_22pm', 
+                         label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio', 
+                         value = NA_integer_), 
+            selectInput(inputId = 'atn2_22i', 
+                        label = '¿Cuenta con el insumo para operar el servicio?', 
+                        choices = c('Si', 'No', 'Parcial', 'NA'), 
+                        selected = 'NA')
+          )),
+          column(3, wellPanel(
+            checkboxInput(inputId = 'atn2_17', 
+                          label = 'Lavandería', 
+                          value = F), 
+            numericInput(inputId = 'atn2_17pm', 
+                         label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (Equipo de salud que incluye lavanderos, técnicos de lavandería, etc.)',
+                         value = NA_integer_), 
+            selectInput(inputId = 'atn2_17i', 
+                        label = '¿Cuenta con el insumo para operar el servicio?', 
+                        choices = c('Si', 'No', 'Parcial', 'NA'), 
+                        selected = 'NA')
+          )),
+          column(3, wellPanel(
+            checkboxInput(inputId = 'atn2_18', 
+                          label = 'Casa de máquinas',
+                          value = F), 
+            numericInput(inputId = 'atn2_18pm', 
+                         label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (Equipo de salud que incluye ingenieros mecánicos, técnicos de mantenimiento, etc.)', 
+                         value = NA_integer_), 
+            selectInput(inputId = 'atn2_18i', 
+                        label = '¿Cuenta con el insumo para operar el servicio?', 
+                        choices = c('Si', 'No', 'Parcial', 'NA'), 
+                        selected = 'NA') 
+          )),
+          column(3, wellPanel(
+            checkboxInput(inputId = 'atn2_20', 
+                          label = 'Gases medicinales', 
+                          value = F), 
+            numericInput(inputId = 'atn2_20pm', 
+                         label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (Equipo de salud que incluye ingenieros biomédicos, técnicos de gases medicinales, etc.)', 
+                         value = NA_integer_), 
+            selectInput(inputId = 'atn2_20i', 
+                        label = '¿Cuenta con el insumo para operar el servicio?', 
+                        choices = c('Si', 'No', 'Parcial', 'NA'), 
+                        selected = 'NA')
+          ))
+        ),
+     fluidRow(
+           column(6, wellPanel(
+             checkboxInput(inputId = 'atn2_19', 
+                           label = 'Subestación eléctrica', 
+                           value = F), 
+             numericInput(inputId = 'atn2_19pm', 
+                          label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (Equipo de salud que incluye ingenieros eléctricos, técnicos de mantenimiento, etc.)', 
+                          value = NA_integer_), 
+             selectInput(inputId = 'atn2_19i', 
+                         label = '¿Cuenta con el insumo para operar el servicio?', 
+                         choices = c('Si', 'No', 'Parcial', 'NA'), 
+                         selected = 'NA'),
+             numericInput(inputId = 'atn2_19se', 
+                          label = '¿Cuántas subestaciones eléctricas funcionales hay en este servicio?', 
+                          value = NA_integer_)
+           )),
+           column(6, wellPanel(
+             checkboxInput(inputId = 'atn2_21', 
+                           label = 'Baños y vestidores', 
+                           value = F), 
+             numericInput(inputId = 'atn2_21baf', 
+                          label = '¿Cuántos baños y vestidores funcionales hay en este servicio?', 
+                          value = NA_integer_), 
+             numericInput(inputId = 'atn2_21ban', 
+                          label = '¿Cuántos baños y vestidores no funcionales hay en este servicio?', 
+                          value = NA_integer_)
+           ))
+         )
+)
+
+#Gestión de residuos hospitalarios y tóxico e inflamable (CRETI)----
+c <- list(
+  h4(tags$b('Gestión de residuos hospitalarios y tóxico e inflamable (CRETI)')),
+  fluidRow(
+  column(6, wellPanel(
+    checkboxInput(inputId = 'atn2_24', 
+                  label = 'Almacén de residuos corrosivos, reactivos, explosivos e infecciosos', 
+                  value = F), 
+    numericInput(inputId = 'atn2_24Pm', 
+                 label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (Equipo de salud que incluye químicos, técnicos de laboratorio, etc.)', 
+                 value = NA_integer_), 
+    selectInput(inputId = 'atn2_24in', 
+                label = '¿Cuenta con la infraestructura para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(6, wellPanel(
+    checkboxInput(inputId = 'atn2_25', 
+                  label = 'Almacén de residuos peligrosos biológico infecciosos (RPBIs)', 
+                  value = F), 
+    numericInput(inputId = 'atn2_25m', 
+                 label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio', 
+                 value = NA_integer_), 
+    selectInput(inputId = 'atn2_25i', 
+                label = '¿Cuenta con la infraestructura para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')  
+  ))
+)
+)
+  
+#Oficinas directivas y administrativas----
+d <- list(
+  h4(tags$b('Oficinas directivas y administrativas')),
+  fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_26', 
+                  label = 'Gobierno', 
+                  value = F),  
+    checkboxInput(inputId = 'atn2_27', 
+                  label = 'Recursos humanos', 
+                  value = F),                                               
+    checkboxInput(inputId = 'atn2_28', 
+                  label = 'Calidad', 
+                  value = F),                                 
+    checkboxInput(inputId = 'atn2_29', 
+                  label = 'Enseñanza', 
+                  value = F)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_30', 
+                  label = 'Investigación', 
+                  value = F),    
+    checkboxInput(inputId = 'atn2_31', 
+                  label = 'Planeación y desarrollo', 
+                  value = F),                                  
+    checkboxInput(inputId = 'atn2_32', 
+                  label = 'Recursos financieros', 
+                  value = F),       
+    checkboxInput(inputId = 'atn2_33', 
+                  label = 'Recursos materiales', 
+                  value = F)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_34', 
+                  label = 'Unidad jurídica', 
+                  value = F),            
+    checkboxInput(inputId = 'atn2_35', 
+                  label = 'Informática', 
+                  value = F)
+  ))
+)
+)
+ 
+#Otras----
+e <- list(
+  h4(tags$b('Otras')),
+  fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_40', 
+                  label = 'Farmacia hospitalaria', 
+                  value = F),
+    checkboxInput(inputId = 'atn2_36', 
+                  label = 'Mortuorio', 
+                  value = F),       
+    checkboxInput(inputId = 'atn2_37', 
+                  label = 'Cocina/Comedor', 
+                  value = F),
+    checkboxInput(inputId = 'atn2_38', 
+                  label = 'Residencias médicas', 
+                  value = F)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_39', 
+                  label = 'Albergue comunitario', 
+                  value = F),                  
+    checkboxInput(inputId = 'atn2_41', 
+                  label = 'Ingeniería biomédica', 
+                  value = F),   
+    checkboxInput(inputId = 'atn2_42', 
+                  label = 'Dormitorios', 
+                  value = F) 
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_105', 
+                  label = 'Unidad/Centro de investigación', 
+                  value = F),
+    checkboxInput(inputId = 'atn2_106', 
+                  label = 'Sedes formadoras de RH especialidad y subespecialidad', 
+                  value = F)
+  ))
+)
+)
+
+#Equipamiento----
+f <- list( 
+  h4(tags$b('Equipamiento')),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_95', 
+                  label = 'Torre laparoscopía', 
+                  value = F), 
+    selectInput(inputId = 'atn2_95sr', 
+                label = '¿El equipo es propio de la institución?)', 
+                choices = c('Si', 'No', 'Subrrogado', 'NA'), 
+                selected = 'NA'),                                               
+    numericInput(inputId = 'atn2_95fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_95nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_) 
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_96', 
+                  label = 'Equipamiento de medicina nuclear', 
+                  value = F), 
+    selectInput(inputId = 'atn2_96sr', 
+                label = '¿El equipo es propio de la institución?)', 
+                choices = c('Si', 'No', 'Subrrogado', 'NA'), 
+                selected = 'NA'),                
+    numericInput(inputId = 'atn2_96fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_96nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_97', 
+                  label = 'Monitores de signos vitales', 
+                  value = F),
+    numericInput(inputId = 'atn2_97fu',                          
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_97nnf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_98', 
+                  label = 'Carro rojo', 
+                  value = F), 
+    numericInput(inputId = 'atn2_98fu',                         
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_98nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+),  
+     fluidRow(
+   column(3, wellPanel(
+     checkboxInput(inputId = 'atn2_99', 
+                   label = 'Incubadora', 
+                   value = F), 
+     numericInput(inputId = 'atn2_99fu',                         
+                  label = '¿Cuánto equipo es funcional?',
+                  value = NA_integer_), 
+     numericInput(inputId = 'atn2_99nf', 
+                  label = '¿Cuánto equipo no es funcional?',
+                  value = NA_integer_)
+   )),
+   column(3, wellPanel(
+     checkboxInput(inputId = 'atn2_100', 
+                   label = 'Báscula con estadímetro', 
+                   value = F), 
+     numericInput(inputId = 'atn2_100fu',                          
+                  label = '¿Cuánto equipo es funcional?',
+                  value = NA_integer_), 
+     numericInput(inputId = 'atn2_100nf', 
+                  label = '¿Cuánto equipo no es funcional?',
+                  value = NA_integer_) 
+   )),
+   column(3, wellPanel(
+     checkboxInput(inputId = 'atn2_101', 
+                   label = 'Mesa de exploración', 
+                   value = F), 
+     numericInput(inputId = 'atn2_101fu',
+                  label = '¿Cuánto equipo es funcional?',
+                  value = NA_integer_), 
+     numericInput(inputId = 'atn2_101nf', 
+                  label = '¿Cuánto equipo no es funcional?',
+                  value = NA_integer_)
+   )),
+   column(3, wellPanel(
+     checkboxInput(inputId = 'atn2_102', 
+                   label = 'Negatoscopio', 
+                   value = F), 
+     numericInput(inputId = 'atn2_102fu',                          
+                  label = '¿Cuánto equipo es funcional?',
+                  value = NA_integer_), 
+     numericInput(inputId = 'atn2_102nf', 
+                  label = '¿Cuánto equipo no es funcional?',
+                  value = NA_integer_)  
+   ))
+ ),
+    fluidRow(
+    column(6, wellPanel(
+      checkboxInput(inputId = 'atn2_103', 
+                    label = 'Autoclave (esterilizador)', 
+                    value = F), 
+      numericInput(inputId = 'atn2_103fu', 
+                   label = '¿Cuánto equipo es funcional?',
+                   value = NA_integer_), 
+      numericInput(inputId = 'atn2_103nf', 
+                   label = '¿Cuánto equipo no es funcional?',
+                   value = NA_integer_)
+    )),
+    column(6, wellPanel(
+      checkboxInput(inputId = 'atn2_104', 
+                    label = 'Respiradores/Ventiladores', 
+                    value = F), 
+      numericInput(inputId = 'atn2_104nf',                          
+                   label = '¿Cuánto equipo es funcional?',
+                   value = NA_integer_), 
+      numericInput(inputId = 'atn2_104nf', 
+                   label = '¿Cuánto equipo no es funcional?',
+                   value = NA_integer_)
+    ))
+  )
+)
+
+
+#Estimulación temprana----
+g <- list(
+  h4(tags$b('Estimulación temprana')),
+  fluidRow(
+  style = "background-color: #F5F5F5; padding: 5px; border-radius: 10px; border: 1px solid #CCCCCC;",
+  column(6, 
+         checkboxInput(inputId = 'atn2_84', 
+                       label = 'Estimulación temprana',
+                       value = F),
+         numericInput(inputId = 'atn2_84me', 
+                      label = '¿Cuántos médicos especialistas trabajan en este servicio?', 
+                      value = NA_integer_),
+         numericInput(inputId = 'atn2_84m', 
+                      label = '¿Cuántos médicos generales trabajan en este servicio?', 
+                      value = NA_integer_)
+  ), 
+  br(), 
+  br(),
+  br(),
+  column(6, 
+         numericInput(inputId = 'atn2_84e', 
+                      label = '¿Cuántos enfermeros trabajan en este servicio?',
+                      value = NA_integer_),
+         selectInput(inputId = 'atn2_84i', 
+                     label = '¿Cuenta con el insumo para operar el servicio?', 
+                     choices = c('Si', 'No', 'Parcial', 'NA'), 
+                     selected = 'NA')     
+  )
+)
+)
+
+#Atención paliativa a enfermos en fase terminal----
+h <- list(
+  h4(tags$b('Atención paliativa a enfermos en fase terminal')),
+  fluidRow(
+  style = "background-color: #F5F5F5; padding: 5px; border-radius: 10px; border: 1px solid #CCCCCC;",
+  column(6, 
+         checkboxInput(inputId = 'atn2_53',
+                       label = 'Cuidados paliativos', 
+                       value = F), 
+         numericInput(inputId = 'atn2_53me',
+                      label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                      value = NA_integer_),
+         numericInput(inputId = 'atn2_53m',
+                      label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                      value = NA_integer_),
+  ), 
+  br(), 
+  br(),
+  br(),
+  column(6, 
+         numericInput(inputId = 'atn2_53e',
+                      label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                      value = NA_integer_),
+         selectInput(inputId = 'atn2_53eq', 
+                     label = '¿Cuenta con el equipo para operar el servicio?', 
+                     choices = c('Si', 'No', 'Parcial', 'NA'), 
+                     selected = 'NA'),     
+  )
+)
+)
+
+#Especialidades médico-clínicas o clínico-quirúrgicas----
+
+i <- list( 
+  h4(tags$b('Especialidades médico-clínicas o clínico-quirúrgicas')),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_54', 
+                  label = 'Oncología', 
+                  value = F), 
+    numericInput(inputId = 'atn2_54me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_54m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_54e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_54eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_55', 
+                  label = 'Ginecología y Obstetricia', 
+                  value = F), 
+    numericInput(inputId = 'atn2_55me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_55m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_55e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_55eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_44', 
+                  label = 'Medicina nuclear', 
+                  value = F),  
+    numericInput(inputId = 'atn2_44me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_44m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_44e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_44eq',
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_45', 
+                  label = 'Medicina familiar', 
+                  value = F), 
+    numericInput(inputId = 'atn2_45me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_45m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_45e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_45eq',
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  ))
+),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_56',
+                  label = 'Pediatría', 
+                  value = F),
+    numericInput(inputId = 'atn2_56me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_56m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_56e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_56eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_57',
+                  label = 'Cirugía General', 
+                  value = F), 
+    numericInput(inputId = 'atn2_57me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_57m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_57e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_57eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_60', 
+                  label = 'Anestesiología', 
+                  value = F), 
+    numericInput(inputId = 'atn2_60me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_60m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_60e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_60eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_61',
+                  label = 'Urgencias Médico-Quirúrgicas', 
+                  value = F), 
+    numericInput(inputId = 'atn2_61me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_61m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_61e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_61eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  ))
+),
+    fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_63',
+                  label = 'Cirugía plástica',
+                  value = F), 
+    numericInput(inputId = 'atn2_63me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_63m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_63e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_63eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_89', 
+                  label = 'Infectología',
+                  value = F),
+    numericInput(inputId = 'atn2_89me', 
+                 label = '¿Cuántos médicos especialistas trabajan en este servicio?', 
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_89m', 
+                 label = '¿Cuántos médicos generales trabajan en este servicio?', 
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_89e', 
+                 label = '¿Cuántos enfermeros trabajan en este servicio?',
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_89i', 
+                label = '¿Cuenta con el insumo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_87', 
+                  label = 'Unidad de terapia intermedia',
+                  value = F),
+    numericInput(inputId = 'atn2_87me', 
+                 label = '¿Cuántos médicos especialistas trabajan en este servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_87m', 
+                 label = '¿Cuántos médicos generales trabajan en este servicio?', 
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_87e', 
+                 label = '¿Cuántos enfermeros trabajan en este servicio?',
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_87i', 
+                label = '¿Cuenta con el insumo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  ))
+)
+)
+
+
+#Servicios médicos-hospitalarios ----
+j <- list(
+  h4(tags$b('Servicios médicos-hospitalarios')),
+  fluidRow(
+  style = "background-color: #F5F5F5; padding: 5px; border-radius: 10px; border: 1px solid #CCCCCC;",
+  column(6, 
+         checkboxInput(inputId = 'atn2_62', 
+                       label = 'Hospitalización', 
+                       value = F), 
+         numericInput(inputId = 'atn2_62me',
+                      label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                      value = NA_integer_),
+         numericInput(inputId = 'atn2_62m',
+                      label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                      value = NA_integer_)
+  ), 
+  br(), 
+  br(),
+  br(),
+  column(6, 
+         numericInput(inputId = 'atn2_62e',
+                      label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                      value = NA_integer_),
+         selectInput(inputId = 'atn2_62eq', 
+                     label = '¿Cuenta con el equipo para operar el servicio?', 
+                     choices = c('Si', 'No', 'Parcial', 'NA'), 
+                     selected = 'NA')     
+  )
+)
+)
+
+#Servicios médicos de apoyo----
+k <- list(
+  h4(tags$b('Servicios médicos de apoyo')),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_64', 
+                  label = 'Inhaloterapia', 
+                  value = F), 
+    numericInput(inputId = 'atn2_64me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_64m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_64e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_64eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_65', 
+                  label = 'Clínica de Heridas y Estomas', 
+                  value = F), 
+    numericInput(inputId = 'atn2_65me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_65m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_65e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_65eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_66',
+                  label = 'Planificación familiar', 
+                  value = F), 
+    numericInput(inputId = 'atn2_66me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_66m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_66e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_66eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_67', 
+                  label = 'Cirugía Ambulatoria',
+                  value = F), 
+    numericInput(inputId = 'atn2_67me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_67m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_67e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_67eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  ))
+),
+    fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_69', 
+                  label = 'Anatomía Patológica',
+                  value = F), 
+    numericInput(inputId = 'atn2_69me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_69m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_69e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_69eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_88', 
+                  label = 'Epidemiología',
+                  value = F),
+    numericInput(inputId = 'atn2_88me', 
+                 label = '¿Cuántos médicos especialistas trabajan en este servicio?', 
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_88m', 
+                 label = '¿Cuántos médicos generales trabajan en este servicio?', 
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_88e', 
+                 label = '¿Cuántos enfermeros trabajan en este servicio?',
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_88i', 
+                label = '¿Cuenta con el insumo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_46', 
+                  label = 'Atención de Enfermería', 
+                  value = F), 
+    numericInput(inputId = 'atn2_46e',   
+                 label = 'Número de enfermeros prestando el servicio', 
+                 value = NA_integer_),                         
+    selectInput(inputId = 'atn2_46eq',
+                label = '¿Cuenta con el equipo para operar el servicio?',
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_47', 
+                  label = 'Estomatología', 
+                  value = F), 
+    numericInput(inputId = 'atn2_47o',
+                 label = 'Número de odontólogos prestando el servicio',
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_47me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_47m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_47e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_47eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  ))
+),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_48', 
+                  label = 'Salud Mental y Adicciones', 
+                  value = F), 
+    numericInput(inputId = 'atn2_48me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_48m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_48ps',
+                 label = '¿Cuántos psicólogos trabajan en el servicio?',
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_48e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_48eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_59', 
+                  label = 'Psicología', 
+                  value = F), 
+    numericInput(inputId = 'atn2_59ps',
+                 label = '¿Cuántos psicólogos trabajan en el servicio?',
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_59eq', 
+                label = '¿Cuenta con el equipo e insumo para operar el servicio?',   #¿aquí sería equipo o insumo?
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_49', 
+                  label = 'Trabajo social', 
+                  value = F), 
+    selectInput(inputId = 'atn2_49eq',
+                label = '¿Cuenta con el equipo e insumo para operar el servicio?',
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_49t',  
+                 label = 'Número de trabajadores sociales prestando el servicio', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_50', 
+                  label = 'Nutrición', 
+                  value = F), 
+    selectInput(inputId = 'atn2_50eq',
+                label = '¿Cuenta con el equipo e insumo para operar el servicio?',
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_50n',
+                 label = 'Número de Nutriólogos prestando el servicio', 
+                 value = NA_integer_)
+  ))
+)
+)
+
+#Asistencia especializada en consultas----
+l <- list( 
+  h4(tags$b('Asistencia especializada en consultas')),
+  column(12, wellPanel(
+  checkboxInput(inputId = 'atn2_51',
+                label = 'Asistencia especializada para consultas (asistente médico)', 
+                value = F), 
+  selectInput(inputId = 'atn2_51eq',
+              label = '¿Cuenta con el equipo para operar el servicio?',
+              choices = c('Si', 'No', 'Parcial', 'NA'), 
+              selected = 'NA'),
+  numericInput(inputId = 'atn2_51a', 
+               label = 'Número de asistentes que brindan el servicio', 
+               value = NA_integer_)
+))
+)
+
+#Asistencia especializada en hospitalización (médico y quirúrgicas)----
+m <- list(
+  h4(tags$b('Asistencia especializada en hospitalización (médico y quirúrgicas)')),
+  column(12, wellPanel(
+  checkboxInput(inputId = 'atn2_52', 
+                label = 'Asistencia especializada para consultas médico y quirúrgicas (asistente médico)', 
+                value = F), 
+  selectInput(inputId = 'atn2_52eq', 
+              label = '¿Cuenta con el equipo para operar el servicio?',
+              choices = c('Si', 'No', 'Parcial', 'NA'), 
+              selected = 'NA'),
+  numericInput(inputId = 'atn2_52a', 
+               label = 'Número de asistentes que brindan el servicio', 
+               value = NA_integer_)
+))
+)
+
+#Medicina transfusional----
+n <- list(
+  h4(tags$b('Medicina transfusional')),
+  column(12, wellPanel(
+  checkboxInput(inputId = 'atn2_70', 
+                label = 'Medicina transfusional (Banco de sangre, servicio de transfusiones)',
+                value = F), 
+  numericInput(inputId = 'atn2_70me',
+               label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+               value = NA_integer_),
+  numericInput(inputId = 'atn2_70m',
+               label = '¿Cuántos médicos generales trabajan en el servicio?', 
+               value = NA_integer_),
+  numericInput(inputId = 'atn2_70e',
+               label = '¿Cuántos enfermeros trabajan en el servicio?', 
+               value = NA_integer_),
+  numericInput(inputId = 'atn2_70pm',
+               label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio',
+               value = NA_integer_),
+  selectInput(inputId = 'atn2_70eq', 
+              label = '¿Cuenta con el equipo para operar el servicio?', 
+              choices = c('Si', 'No', 'Parcial', 'NA'), 
+              selected = 'NA')
+))
+)
+
+#Auxiliares diagnóstico y tratamiento----
+o <- list( 
+  h4(tags$b('Auxiliares de diagnóstico y tratamiento')),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_71', 
+                  label = 'Ultrasonido', 
+                  value = F), 
+    numericInput(inputId = 'atn2_71pc',
+                 label = 'Total de personal capacitado que puede brindar el servicio (técnicos, radiólogos, etc.)', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_71eq', 
+                label = '¿Cuenta con el equipo para operar el servicio', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_71fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_71nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_72', 
+                  label = 'Mastógrafo',
+                  value = F), 
+    numericInput(inputId = 'atn2_72pc',
+                 label = 'Total de personal capacitado que puede brindar el servicio (técnicos, radiólogos, etc.)', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_72eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_72fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_72nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_73',    
+                  label = 'USG DOPPLER',
+                  value = F), 
+    numericInput(inputId = 'atn2_73pc',
+                 label = 'Total de personal capacitado que puede brindar el servicio (técnicos, radiólogos, etc.)', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_73eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_73fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_74nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_77', 
+                  label = 'Espirometría', 
+                  value = F), 
+    numericInput(inputId = 'atn2_77pc',
+                 label = 'Total de personal capacitado que puede brindar el servicio', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_77eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_77es', 
+                 label = '¿Cuántos equipos de espirometría se cuentan en el servicio?',
+                 value = NA_integer_),                        
+    numericInput(inputId = 'atn2_77fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_77nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_79', 
+                  label = 'Hemodinamia',
+                  value = F), 
+    numericInput(inputId = 'atn2_79pc',
+                 label = 'Total de personal capacitado que puede brindar el servicio', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_79eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_79fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_79nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_83', 
+                  label = 'GeneXpert', 
+                  value = F), 
+    numericInput(inputId = 'atn2_83pc',
+                 label = 'Total de personal capacitado que puede brindar el servicio (técnicos, radiólogos, etc.)', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_83eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_83fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_83nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_74', 
+                  label = 'Tomografía',
+                  value = F), 
+    numericInput(inputId = 'atn2_74me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_74m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_74e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_74eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_74fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_74nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_75', 
+                  label = 'Resonancia magnética',
+                  value = F), 
+    numericInput(inputId = 'atn2_75me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_75m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_75e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_75eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_75fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_75nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_76', 
+                  label = 'Endoscopía',
+                  value = F), 
+    numericInput(inputId = 'atn2_76me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_76m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_76e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_76eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_76fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_76nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_78',
+                  label = 'Electroencefalograma',
+                  value = F), 
+    numericInput(inputId = 'atn2_78me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_78m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_78e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_78eq',
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_78es', 
+                 label = '¿Cuántos equipos de electro-encefalograma hay en el servicio?',
+                 value = NA_integer_),                        
+    numericInput(inputId = 'atn2_78fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_78nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_80',
+                  label = 'Diálisis y Hemodiálisis',
+                  value = F), 
+    numericInput(inputId = 'atn2_80me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_80m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_80e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),                       
+    selectInput(inputId = 'atn2_80eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_80fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_80nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_81', 
+                  label = 'Audiología y Foniatría',
+                  value = F), 
+    numericInput(inputId = 'atn2_81me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_81m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_81e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_81eq',
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_81aud', 
+                 label = '¿Cuánto equipos de electro de audiología y foniatría hay en el servicio?',
+                 value = NA_integer_),                        
+    numericInput(inputId = 'atn2_81fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_81nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+),
+  fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_82', 
+                  label = 'Ecocardiograma',
+                  value = F), 
+    numericInput(inputId = 'atn2_82me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_82m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_82e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_82eq',
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn2_82ec', 
+                 label = '¿Cuántos equipos de ecocardiograma hay en el servicio?',
+                 value = NA_integer_),                        
+    numericInput(inputId = 'atn2_82fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn2_82nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_85', 
+                  label = 'Vacunación universal',
+                  value = F),
+    numericInput(inputId = 'atn2_85e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    selectInput(inputId = 'atn2_85i', 
+                label = '¿Cuenta con el insumo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    selectInput(inputId = 'atn2_85rf', 
+                label = '¿Cuenta con red de frío en el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA')                                             
+  )),
+  column(4, wellPanel(
+    checkboxGroupInput(inputId = 'atn2_107',
+                       label = 'Marque las vacunas disponibles en el servicio:',
+                       choices = c('BCG', 'Hepatitis B', 'Hexavalente (DPaT+VPI+Hib+HepB)', 
+                                   'DPT', 'Rotavirus', 'Neumocócica conjugada', 'SRP', 
+                                   'Influenza', 'COVID-19', 'VPH', 'NA'),
+                       selected = 'NA')
+  ))
+), 
+fluidRow(
+  column(6, wellPanel(
+  checkboxInput(inputId = 'atn2_68',
+                label = 'Terapia física y rehabilitación',
+                value = F), 
+  numericInput(inputId = 'atn2_68me',
+               label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+               value = NA_integer_),
+  numericInput(inputId = 'atn2_68m',
+               label = '¿Cuántos médicos generales trabajan en el servicio?', 
+               value = NA_integer_),
+  numericInput(inputId = 'atn2_68ft',
+               label = '¿Cuántos fisioterapeutas trabajan en el servicio?',
+               value = NA_integer_),
+  numericInput(inputId = 'atn2_68e',
+               label = '¿Cuántos enfermeros trabajan en el servicio?', 
+               value = NA_integer_),
+  selectInput(inputId = 'atn2_68eq', 
+              label = '¿Cuenta con el equipo para operar el servicio?', 
+              choices = c('Si', 'No', 'Parcial', 'NA'), 
+              selected = 'NA')
+)),
+column(6, wellPanel(
+checkboxInput(inputId = 'atn2_115',
+              label = 'Rayos X',
+              value = F), 
+numericInput(inputId = 'atn2_115me',
+             label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+             value = NA_integer_),
+numericInput(inputId = 'atn2_115m',
+             label = '¿Cuántos médicos generales trabajan en el servicio?', 
+             value = NA_integer_),
+numericInput(inputId = 'atn2_115e',
+             label = '¿Cuántos enfermeros trabajan en el servicio?', 
+             value = NA_integer_),
+numericInput(inputId = 'atn2_115pm',
+             label = 'Total de otro personal que integra el equipo multidisciplinario que trabaja en el servicio (técnicos, radiólogos, etc.)', 
+             value = NA_integer_),
+selectInput(inputId = 'atn2_115eq', 
+            label = '¿Cuenta con el equipo para operar el servicio?', 
+            choices = c('Si', 'No', 'Parcial', 'NA'), 
+            selected = 'NA')
+)) 
+)
+)
+#Parque vehicular---- 
+p <-  list( 
+  h4(tags$b('Parque vehicular')),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'pve_86', 
+                  label = 'Ambulancia', 
+                  value = F),
+    numericInput(inputId = 'pve_86fu', 
+                 label = '¿Cuántas funcionan?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'pve_86nf', 
+                 label = '¿Cuántas no funcionan?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'pve_87', 
+                  label = 'Sedán', 
+                  value = F), 
+    numericInput(inputId = 'pve_87fu', 
+                 label = '¿Cuántos funcionan?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'pve_87nf', 
+                 label = '¿Cuántos no funcionan',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'pve_88', 
+                  label = 'Pick up', 
+                  value = F), 
+    numericInput(inputId = 'pve_88fu', 
+                 label = '¿Cuántos funcionan',
+                 value = NA_integer_), 
+    numericInput(inputId = 'pve_88nf', 
+                 label = '¿Cuántos no funcionan',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'pve_89', 
+                  label = 'Tonelada', 
+                  value = F),
+    numericInput(inputId = 'pve_89fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'pve_89nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'pve_90', 
+                  label = 'Van', 
+                  value = F),
+    numericInput(inputId = 'pve_90fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'pve_90nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'pve_91', 
+                  label = 'Remolque', 
+                  value = F),
+    numericInput(inputId = 'pve_92fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'pve_93nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'pve_94', 
+                  label = 'Otro', 
+                  value = F),                
+    numericInput(inputId = 'pve_94fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'pve_94nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+  )
+)
+
+###Preguntas adicionales para el 2do nivel----
+#Servicios médicos disponibles
+a2 <- list(
+  h4(tags$b('Servicios médicos disponibles')),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_108', 
+                  label = 'Consulta externa especializada: Medicina interna', 
+                  value = F),                
+    numericInput(inputId = 'atn2_108me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_108t',
+                 label = '¿En cuántos turnos se brinda el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_108c',
+                 label = '¿Con cuántos consultorios cuenta el servicio?', 
+                 value = NA_integer_)
+  )),
+    column(3, wellPanel(
+      checkboxInput(inputId = 'atn2_109', 
+                    label = 'Consulta externa especializada: Pediatría', 
+                    value = F),                
+      numericInput(inputId = 'atn2_109me',
+                   label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                   value = NA_integer_),
+      numericInput(inputId = 'atn2_109t',
+                   label = '¿En cuántos turnos se brinda el servicio?', 
+                   value = NA_integer_),
+      numericInput(inputId = 'atn2_109c',
+                   label = '¿Con cuántos consultorios cuenta el servicio?', 
+                   value = NA_integer_)
+  )),
+    column(3, wellPanel(
+      checkboxInput(inputId = 'atn2_110', 
+                    label = 'Consulta externa especializada: Ginecología y obstetricia', 
+                    value = F),                
+      numericInput(inputId = 'atn2_110me',
+                   label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                   value = NA_integer_),
+      numericInput(inputId = 'atn2_110t',
+                   label = '¿En cuántos turnos se brinda el servicio?', 
+                   value = NA_integer_),
+      numericInput(inputId = 'atn2_110c',
+                   label = '¿Con cuántos consultorios cuenta el servicio?', 
+                   value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_111', 
+                  label = 'Consulta externa especializada: Cirugía general', 
+                  value = F),                
+    numericInput(inputId = 'atn2_111me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_111t',
+                 label = '¿En cuántos turnos se brinda el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_111c',
+                 label = '¿Con cuántos consultorios cuenta el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_112', 
+                  label = 'Consulta externa especializada: Anestesiología', 
+                  value = F),                
+    numericInput(inputId = 'atn2_112me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_112t',
+                 label = '¿En cuántos turnos se brinda el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_112c',
+                 label = '¿Con cuántos consultorios cuenta el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_113', 
+                  label = 'Consulta externa especializada: Ortopedia y traumatología', 
+                  value = F),                
+    numericInput(inputId = 'atn2_113me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_113t',
+                 label = '¿En cuántos turnos se brinda el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_113c',
+                 label = '¿Con cuántos consultorios cuenta el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_114', 
+                  label = 'Consulta externa especializada: Otorrinolaringología', 
+                  value = F),                
+    numericInput(inputId = 'atn2_114me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_114t',
+                 label = '¿En cuántos turnos se brinda el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_114c',
+                 label = '¿Con cuántos consultorios cuenta el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_116', 
+                  label = 'Terapia intensiva', 
+                  value = F),                
+    numericInput(inputId = 'atn2_116me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_116m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_116e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_116t',
+                 label = '¿En cuántos turnos se brinda el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_117', 
+                  label = 'Medicina Interna', 
+                  value = F),                
+    numericInput(inputId = 'atn2_117me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_117m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_117e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_117t',
+                 label = '¿En cuántos turnos se brinda el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_117c',
+                 label = '¿Con cuántos consultorios cuenta el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_118', 
+                  label = 'Clínica del dolor', 
+                  value = F),                
+    numericInput(inputId = 'atn2_118me',
+                 label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_118m',
+                 label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_118e',
+                 label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_118t',
+                 label = '¿En cuántos turnos se brinda el servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_118c',
+                 label = '¿Con cuántos consultorios cuenta el servicio?', 
+                 value = NA_integer_)
+  ))
+)
+)
+
+b2 <- list(
+h4(tags$b('Recurso humano')), 
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_119', 
+                  label = 'Cardiología', 
+                  value = F),
+    numericInput(inputId = 'atn2_119me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_120', 
+                  label = 'Geriatría', 
+                  value = F),
+    numericInput(inputId = 'atn2_120me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_121', 
+                  label = 'Dermatología', 
+                  value = F),
+    numericInput(inputId = 'atn2_121me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_122', 
+                  label = 'Psiquiatría', 
+                  value = F),
+    numericInput(inputId = 'atn2_122me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_123', 
+                  label = 'Gastroenterología', 
+                  value = F),
+    numericInput(inputId = 'atn2_123me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_124', 
+                  label = 'Hematología', 
+                  value = F),
+    numericInput(inputId = 'atn2_124me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_125', 
+                  label = 'Nefrología', 
+                  value = F),
+    numericInput(inputId = 'atn2_125me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_126', 
+                  label = 'Neumología', 
+                  value = F),
+    numericInput(inputId = 'atn2_126me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_127', 
+                  label = 'Reumatología', 
+                  value = F),
+    numericInput(inputId = 'atn2_127me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_128', 
+                  label = 'Endocrinología', 
+                  value = F),
+    numericInput(inputId = 'atn2_128me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_129', 
+                  label = 'Genética', 
+                  value = F),
+    numericInput(inputId = 'atn2_129me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_130', 
+                  label = 'Inmunología', 
+                  value = F),
+    numericInput(inputId = 'atn2_130me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_131', 
+                  label = 'Neonatología', 
+                  value = F),
+    numericInput(inputId = 'atn2_131me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_132', 
+                  label = 'Traumatología y ortopedia', 
+                  value = F),
+    numericInput(inputId = 'atn2_132me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_133', 
+                  label = 'Angiología', 
+                  value = F),
+    numericInput(inputId = 'atn2_133me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_134', 
+                  label = 'Cirugía pediátrica', 
+                  value = F),
+    numericInput(inputId = 'atn2_134me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_135', 
+                  label = 'Oftalmología', 
+                  value = F),
+    numericInput(inputId = 'atn2_135me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_136', 
+                  label = 'Otorrinolaringología', 
+                  value = F),
+    numericInput(inputId = 'atn2_136me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_137', 
+                  label = 'Cirugía maxilofacial', 
+                  value = F),
+    numericInput(inputId = 'atn2_137me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn2_138', 
+                  label = 'Urología', 
+                  value = F),
+    numericInput(inputId = 'atn2_138me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_139', 
+                  label = 'Neurocirugía', 
+                  value = F),
+    numericInput(inputId = 'atn2_139me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_140', 
+                  label = 'Patología', 
+                  value = F),
+    numericInput(inputId = 'atn2_140me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_141', 
+                  label = 'Neurología', 
+                  value = F),
+    numericInput(inputId = 'atn2_141me',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+)
+)
+
+c2 <- list(
+  h4(tags$b('Infraestructura y equipamiento')), 
+fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_142', 
+                  label = 'Material de curación', 
+                  value = F),
+    numericInput(inputId = 'atn2_142ma',
+                 label = '¿Con cuánto material se cuenta en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_143', 
+                  label = 'Equipo para control de infecciones', 
+                  value = F),
+    numericInput(inputId = 'atn2_143ma',
+                 label = '¿Con cuánto material se cuenta en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn2_144', 
+                  label = 'Lavamanos clínicos', 
+                  value = F),
+    numericInput(inputId = 'atn2_144fu',
+                 label = '¿Cuánto equipo es funcional?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn2_144nf',
+                 label = '¿Cuánto equipo no es funcional?', 
+                 value = NA_integer_)
+  ))
+)
+)
+
+##Preguntas adicionales para 3er nivel----
+a3 <- list(
+  h4(tags$b('Servicios complementarios')),
+  fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_01', 
+                  label = 'Servicio de archivo clínico', 
+                  value = F),
+    numericInput(inputId = 'atn3_01a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_02', 
+                  label = 'Servicios generales tercerizados (limpieza, vigilancia, etc.)', 
+                  value = F),
+    numericInput(inputId = 'atn3_02a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_) 
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_03', 
+                  label = 'Capilla o espacio espiritual', 
+                  value = F),
+    numericInput(inputId = 'atn3_03a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+     
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_04', 
+                  label = 'Clínica de arritmias',     #no sé si debería llevar más preguntas como cuántas personas trabajan en el servicio
+                  value = F),
+    numericInput(inputId = 'atn3_04a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_05', 
+                  label = 'Clínica de cateter', 
+                  value = F),
+    numericInput(inputId = 'atn3_05a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+)),
+column(3, wellPanel(
+  checkboxInput(inputId = 'atn3_06', 
+                label = 'Clínica de displasias',     
+                value = F),
+  numericInput(inputId = 'atn3_06a',
+               label = '¿Cuántas áreas se destinan a este servicio?', 
+               value = NA_integer_)
+)),
+column(3, wellPanel(
+  checkboxInput(inputId = 'atn3_07', 
+                label = 'Clínica de diabetes',     
+                value = F),
+  numericInput(inputId = 'atn3_07a',
+               label = '¿Cuántas áreas se destinan a este servicio?', 
+               value = NA_integer_)
+)),
+column(3, wellPanel(
+  checkboxInput(inputId = 'atn3_08', 
+                label = 'Clínica de heridas y estomas',     
+                value = F),
+  numericInput(inputId = 'atn3_08a',
+               label = '¿Cuántas áreas se destinan a este servicio?', 
+               value = NA_integer_)
+))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_09', 
+                  label = 'Clínica del sueño',     
+                  value = F),
+    numericInput(inputId = 'atn3_09',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+      checkboxInput(inputId = 'atn3_10', 
+                    label = 'Clínica de tuberculosis',     
+                    value = F),
+      numericInput(inputId = 'atn3_10',
+                   label = '¿Cuántas áreas se destinan a este servicio?', 
+                   value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_11', 
+                  label = 'Radioterapia',     
+                  value = F),
+    numericInput(inputId = 'atn3_11a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_12', 
+                  label = 'Rehabilitación pulmonar',     
+                  value = F),
+    numericInput(inputId = 'atn3_12a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_13', 
+                  label = 'Rehabilitación cardiaca',     
+                  value = F),
+    numericInput(inputId = 'atn3_13a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_14', 
+                  label = 'Quimioterapia',     
+                  value = F),
+    numericInput(inputId = 'atn3_14a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_15', 
+                  label = 'Radiología intervencionista',     
+                  value = F),
+    numericInput(inputId = 'atn3_15a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_16', 
+                  label = 'Radiología de estudios especiales',     
+                  value = F),
+    numericInput(inputId = 'atn3_16a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_17', 
+                  label = 'Tamiz neonatal',     
+                  value = F),
+    numericInput(inputId = 'atn3_17a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_18', 
+                  label = 'Tamiz auditivo',     
+                  value = F),
+    numericInput(inputId = 'atn3_18a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_19', 
+                  label = 'Terapia de lenguaje',     
+                  value = F),
+    numericInput(inputId = 'atn3_19a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_20', 
+                  label = 'Imagenología',     
+                  value = F),
+    numericInput(inputId = 'atn3_20a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn3_20fu',
+                 label = '¿Cuánto equipo es funcional?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn3_20nf',
+                 label = '¿Cuánto equipo no es funcional?', 
+                 value = NA_integer_),
+    
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_21', 
+                  label = 'Densitometría',     
+                  value = F),
+    numericInput(inputId = 'atn3_21a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_22', 
+                  label = 'Neurofisiología',     
+                  value = F),
+    numericInput(inputId = 'atn3_22a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_) 
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_23', 
+                  label = 'Electrocardiograma',     
+                  value = F),
+    numericInput(inputId = 'atn3_23a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_) 
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_24', 
+                  label = 'Gammagrafía',     
+                  value = F),
+    numericInput(inputId = 'atn3_24a',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_)
+  ))
+)
+)
+
+b3 <- list(
+  h4(tags$b('Recurso humano especializado')),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_25', 
+                  label = 'Inmunología clínica',     
+                  value = F),
+    numericInput(inputId = 'atn3_25a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_26', 
+                  label = 'Audiología y otoneurología',     
+                  value = F),
+    numericInput(inputId = 'atn3_26a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_27', 
+                  label = 'Angiología',     
+                  value = F),
+    numericInput(inputId = 'atn3_27a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_28', 
+                  label = 'Biología de la reproducción',     
+                  value = F),
+    numericInput(inputId = 'atn3_28a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_29', 
+                  label = 'Cardiología',     
+                  value = F),
+    numericInput(inputId = 'atn3_29a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_) 
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_30', 
+                  label = 'Cardiología pediátrica',     
+                  value = F),
+    numericInput(inputId = 'atn3_30a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_) 
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_31', 
+                  label = 'Calidad en la atención y seguridad',     
+                  value = F),
+    numericInput(inputId = 'atn3_31a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_31', 
+                  label = 'Dermatología',     
+                  value = F),
+    numericInput(inputId = 'atn3_31a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_32', 
+                  label = 'Endocrinología',     
+                  value = F),
+    numericInput(inputId = 'atn3_32a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_33', 
+                  label = 'Endocrinología pediátrica',     
+                  value = F),
+    numericInput(inputId = 'atn3_33a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_34', 
+                  label = 'Gastroenterología',     
+                  value = F),
+    numericInput(inputId = 'atn3_34a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_35', 
+                  label = 'Genética',     
+                  value = F),
+    numericInput(inputId = 'atn3_35a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_35', 
+                  label = 'Geriatría',     
+                  value = F),
+    numericInput(inputId = 'atn3_35a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_36', 
+                  label = 'Hematología',     
+                  value = F),
+    numericInput(inputId = 'atn3_36a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_37', 
+                  label = 'Medicina materno-fetal',     
+                  value = F),
+    numericInput(inputId = 'atn3_37a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_38', 
+                  label = 'Medicina crítica',     
+                  value = F),
+    numericInput(inputId = 'atn3_38a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_39', 
+                  label = 'Medicina interna',     
+                  value = F),
+    numericInput(inputId = 'atn3_39a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_40', 
+                  label = 'Nefrología',     
+                  value = F),
+    numericInput(inputId = 'atn3_40a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_41', 
+                  label = 'Neurología',     
+                  value = F),
+    numericInput(inputId = 'atn3_41a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_42', 
+                  label = 'Neurodesarrollo',     
+                  value = F),
+    numericInput(inputId = 'atn3_42a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_43', 
+                  label = 'Neonatología',     
+                  value = F),
+    numericInput(inputId = 'atn3_43a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_44', 
+                  label = 'Oftalmología',     
+                  value = F),
+    numericInput(inputId = 'atn3_44a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_45', 
+                  label = 'Otorrinolaringología',     
+                  value = F),
+    numericInput(inputId = 'atn3_45a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_46', 
+                  label = 'Oncología médica',     
+                  value = F),
+    numericInput(inputId = 'atn3_46a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_47', 
+                  label = 'Oncología quirúrgica',     
+                  value = F),
+    numericInput(inputId = 'atn3_47a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_48', 
+                  label = 'Oncología pediátrica',     
+                  value = F),
+    numericInput(inputId = 'atn3_48a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_49', 
+                  label = 'Psiquiatría',     
+                  value = F),
+    numericInput(inputId = 'atn3_49a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_50', 
+                  label = 'Radio-oncología',     
+                  value = F),
+    numericInput(inputId = 'atn3_50a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_51', 
+                  label = 'Urología',     
+                  value = F),
+    numericInput(inputId = 'atn3_51a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_52', 
+                  label = 'Cirugía cardiotorácica',     
+                  value = F),
+    numericInput(inputId = 'atn3_52a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_53', 
+                  label = 'Cirugía pediátrica',     
+                  value = F),
+    numericInput(inputId = 'atn3_53a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_54', 
+                  label = 'Cirugía de cabeza y cuello',     
+                  value = F),
+    numericInput(inputId = 'atn3_54a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_55', 
+                  label = 'Cirugía de columna',     
+                  value = F),
+    numericInput(inputId = 'atn3_55a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_56', 
+                  label = 'Cirugía de mínima invasión',     
+                  value = F),
+    numericInput(inputId = 'atn3_56a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_57', 
+                  label = 'Neurocirugía',     
+                  value = F),
+    numericInput(inputId = 'atn3_57a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_58', 
+                  label = 'Traumatología y ortopedia',     
+                  value = F),
+    numericInput(inputId = 'atn3_58a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn3_59', 
+                  label = 'Odontología',     
+                  value = F),
+    numericInput(inputId = 'atn3_59a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn3_60', 
+                  label = 'Ortodoncia',     
+                  value = F),
+    numericInput(inputId = 'atn3_60a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn3_61', 
+                  label = 'Terapia endovascular',     
+                  value = F),
+    numericInput(inputId = 'atn3_61a',
+                 label = '¿Cuántos especialistas trabajan en el servicio?', 
+                 value = NA_integer_)
+  ))
+)
+)
+
+#Infraestructura
+c3 <- list(
+  h4(tags$b('Infraestructura y equipamiento')),
+  fluidRow(
+column(3, wellPanel(
+  checkboxInput(inputId = 'atn3_62', 
+                label = 'Salas UCI con monitoreo centralizado', 
+                value = F),
+  selectInput(inputId = 'atn3_62eq', 
+              label = '¿Cuenta con el equipo para operar el servicio?', 
+              choices = c('Si', 'No', 'Parcial', 'NA'), 
+              selected = 'NA'),
+  numericInput(inputId = 'atn3_62fu',
+               label = '¿Cuánto equipo es funcional?', 
+               value = NA_integer_),
+  numericInput(inputId = 'atn3_62nf',
+               label = '¿Cuánto equipo no es funcional?', 
+               value = NA_integer_)
+)),
+column(3, wellPanel(
+  checkboxInput(inputId = 'atn3_63', 
+                label = 'Camas eléctricas',
+                value = F),
+  numericInput(inputId = 'atn3_63t',
+               label = '¿Cuál es el total de camas eléctricas que se encuentran en la unidad?', 
+               value = NA_integer_)
+)),
+column(3, wellPanel(
+  checkboxInput(inputId = 'atn3_64', 
+                label = 'Equipos de ventilación mecánica avanzada', 
+                value = F),
+  numericInput(inputId = 'atn3_64fu',
+               label = '¿Cuánto equipo es funcional?', 
+               value = NA_integer_),
+  numericInput(inputId = 'atn3_64nf',
+               label = '¿Cuánto equipo no es funcional?', 
+               value = NA_integer_)
+)),
+column(3, wellPanel(
+  checkboxInput(inputId = 'atn3_65', 
+                label = 'Equipos de anestesia de alta gama', 
+                value = F),
+  numericInput(inputId = 'atn3_65fu',
+               label = '¿Cuánto equipo es funcional?', 
+               value = NA_integer_),
+  numericInput(inputId = 'atn3_65nf',
+               label = '¿Cuánto equipo no es funcional?', 
+               value = NA_integer_)
+  
+))
+),
+fluidRow(
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_66', 
+                  label = 'Laboratorios automatizados', 
+                  value = F),
+    numericInput(inputId = 'atn3_66t',
+                 label = '¿Cuántas áreas se destinan a este servicio?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn3_66fu',
+                 label = '¿Cuánto equipo es funcional?', 
+                 value = NA_integer_),
+    numericInput(inputId = 'atn3_66nf',
+                 label = '¿Cuánto equipo no es funcional?', 
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_67', 
+                  label = 'Imagenología digital', 
+                  value = F),
+    selectInput(inputId = 'atn3_67eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn3_67fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn3_67nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_68', 
+                  label = 'Sistema de historia clínica electrónica', 
+                  value = F),
+    selectInput(inputId = 'atn3_68eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn3_68fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn3_68nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(3, wellPanel(
+    checkboxInput(inputId = 'atn3_69', 
+                  label = 'Cirugía mínimamente invasiva', 
+                  value = F),
+    selectInput(inputId = 'atn3_69eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn3_69fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn3_69nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+),
+fluidRow(
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn3_70', 
+                  label = 'Central de esterilización moderna', 
+                  value = F),
+    selectInput(inputId = 'atn3_70eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn3_70fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn3_70nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn3_71', 
+                  label = 'Áreas de aislamiento biológico', 
+                  value = F),
+    numericInput(inputId = 'atn3_71a', 
+                 label = '¿Cuántas áreas brindan este servicio?',
+                 value = NA_integer_)
+  )),
+  column(4, wellPanel(
+    checkboxInput(inputId = 'atn3_72', 
+                  label = 'Unidad coronaria', 
+                  value = F),
+    selectInput(inputId = 'atn3_72eq', 
+                label = '¿Cuenta con el equipo para operar el servicio?', 
+                choices = c('Si', 'No', 'Parcial', 'NA'), 
+                selected = 'NA'),
+    numericInput(inputId = 'atn3_72fu', 
+                 label = '¿Cuánto equipo es funcional?',
+                 value = NA_integer_), 
+    numericInput(inputId = 'atn3_72nf', 
+                 label = '¿Cuánto equipo no es funcional?',
+                 value = NA_integer_)
+  ))
+)
+)
+
