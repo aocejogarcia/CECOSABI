@@ -7,30 +7,6 @@ library(shinylive)
 library(dplyr)
 library(shinyjs)
 
-##Nivel de atención
-niv <- fluidRow(
-  column(4, wellPanel(
-selectInput(inputId = 'atn_01', 
-            label = 'Nivel de atención', 
-            choices = c('Primer', 'Segundo', 'Tercer', 'NA'), 
-            selected = 'NA')
-))
-)
-#Condicional (primero cargar los objetos de abajo)
-cond0 <- conditionalPanel(
-  condition = "input.atn_01 == 'Primer'",
-  c(n1)
-)
-
-cond1 <- conditionalPanel(
-  condition = "input.atn_01 == 'Segundo'",
-  c(n1, n2)
-)
-
-cond2 <- conditionalPanel(
-  condition = "input.atn_01 == 'Tercer'",
-  c(n1, n2, n3)
-)
 
 ######AQUÍ COMIENZAN LAS PREGUNTAS
 #1er nivel----
@@ -3275,4 +3251,30 @@ n3 <- list(
                    value = NA_integer_)
     ))
   )
+)
+
+
+##Nivel de atención
+niv <- fluidRow(
+  column(4, wellPanel(
+    selectInput(inputId = 'atn_01', 
+                label = 'Nivel de atención', 
+                choices = c('Primer', 'Segundo', 'Tercer', 'NA'), 
+                selected = 'NA')
+  ))
+)
+#Condicional (primero cargar los objetos de abajo)
+cond0 <- conditionalPanel(
+  condition = "input.atn_01 == 'Primer'",
+  c(n1)
+)
+
+cond1 <- conditionalPanel(
+  condition = "input.atn_01 == 'Segundo'",
+  c(n1, n2)
+)
+
+cond2 <- conditionalPanel(
+  condition = "input.atn_01 == 'Tercer'",
+  c(n1, n2, n3)
 )
