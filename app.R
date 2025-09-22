@@ -5,8 +5,8 @@ library(tidyr)
 library(readr)
 library(googlesheets4)
 
-source('Alejandro.R')
-source('Manuel.R')
+#source('Alejandro.R')
+#source('Manuel.R')
 source('cecosabi-alpha.R')
 #setwd('../snsp_inteligencia/CECOSABI/')
 #cata <- bind_rows(
@@ -47,7 +47,7 @@ source('cecosabi-alpha.R')
 #  saveRDS('clues.rds')
 catalogo <- read_rds('clues.rds')
 
-gs4_auth(path = "zippy-acronym-328605-937daf22dbd8.json", email = "captura-2@zippy-acronym-328605.iam.gserviceaccount.com", cache = "secrets")
+#gs4_auth(path = "zippy-acronym-328605-937daf22dbd8.json", email = "captura-2@zippy-acronym-328605.iam.gserviceaccount.com", cache = "secrets")
 
 SHEET_ID <- '1WNVXuo_tJNkSiABswhOtUvUUC9y--ZV74bUWP5UYHow'
 
@@ -95,42 +95,44 @@ ui <- dashboardPage(skin = 'red',
     '))),
                                   div(
                                     id = "Identification",
-                                    h3(tags$b('Máscara de captura para monitoreo de acciones extramuros')),
+                                    h3(tags$b('Máscara de captura')),
                                     fluidRow(
-                                      column(12,
+                                      column(6, wellPanel(
                                              textInput(inputId = 'nombre', label = 'Nombre de quien reporta'),
+                                             selectInput(inputId = 'dependencia', label = 'Institución',
+                                                         choices = c(sort(unique(catalogo$INSTITUCION)), 'Sin seleccion'), selected = 'Sin seleccion'
+                                             ),
                                              selectInput(inputId = 'municipio', label = 'Municipio',
                                                          choices = c(sort(unique(catalogo$MUNICIPIO)), 'Sin seleccion'), selected = 'Sin seleccion'
                                                          ),
-                                             selectInput(inputId = 'dependencia', label = 'Dependencia',
-                                                         choices = c(sort(unique(catalogo$INSTITUCION)), 'Sin seleccion'), selected = 'Sin seleccion'
-                                                         ),
-                                             selectInput(inputId = 'atn',
-                                                         label = labelMandatory('Nivel de atención'),
-                                                         choices = c(sort(unique(catalogo$ATN)), 'Sin seleccion'), selected = 'Sin seleccion'
-                                                         ),
+                                             #selectInput(inputId = 'atn',
+                                             #             label = labelMandatory('Nivel de atención'),
+                                             #            choices = c(sort(unique(catalogo$ATN)), 'Sin seleccion'), selected = 'Sin seleccion'
+                                            #             ),
+                                      )),
+                                      column(6, wellPanel(
                                              selectInput(inputId = 'nom_ins',
                                                          label = labelMandatory('Nombre del lugar'),
                                                          choices = c(sort(catalogo$UNIDAD)), selected = 'Sin seleccion'
                                                          ),
+                                             textInput(inputId = 'tel',
+                                                          label = 'Telefono del lugar'
+                                                          ),
                                              checkboxGroupInput(inputId = 'horario',
                                                                 label = 'Horario',
                                                                 choices = c('Matutino', 'Vespertino', 'Jornada acumulada'),
-                                                                selected = 'Matutino'),
-                                             numericInput(inputId = 'tel',
-                                                          label = 'Telefono del lugar',
-                                                          value = NA_integer_, min = 100000000, max = 9999999999
-                                                          )
+                                                                selected = 'Matutino')
+                                      )
                                       )
                                     )
                                     ),
                                   div(
                                     id = "2do y 3er nivel",
-                                    h3(tags$b('Servicios de Atencion')),
+                                    #h3(tags$b('Nivel de Atencion')),
                                     niv,
-                                    fluidRow(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p
-                                      ),
-                                    cond1, cond2
+                                    #fluidRow(n1
+                                    #  ),
+                                    cond0, cond1, cond2
                                   ),
                                   actionButton("submit", "Enviar", class = "btn-primary"),
                                   shinyjs::hidden(
@@ -233,57 +235,57 @@ server <- function(input, output, session) {
     }
   )
 
-  distritos <- reactive({
-    if (input$municipio %in% 'Sin seleccion' & input$dependencia %in% 'Sin seleccion' & input$atn %in% 'Sin seleccion') {
-      catalogo <- catalogo
-    } else if (!input$municipio %in% 'Sin seleccion' & input$dependencia %in% 'Sin seleccion' & input$atn %in% 'Sin seleccion') {
-      catalogo <- catalogo %>% 
-        filter(MUNICIPIO == input$municipio)
-    } else if (!input$municipio %in% 'Sin seleccion' & !input$dependencia %in% 'Sin seleccion' & input$atn %in% 'Sin seleccion') {
-      catalogo <- catalogo %>% 
-        filter(MUNICIPIO == input$municipio, INSTITUCION == input$dependencia)
-    } else  if (!input$municipio %in% 'Sin seleccion' & !input$dependencia %in% 'Sin seleccion' & !input$atn %in% 'Sin seleccion'){
-      catalogo <- catalogo %>% 
-        filter(MUNICIPIO == input$municipio, INSTITUCION == input$dependencia, ATN == input$atn)
-    }
-    
-  })
+ # distritos <- reactive({
+#    if (input$municipio %in% 'Sin seleccion' & input$dependencia %in% 'Sin seleccion' & input$atn %in% 'Sin seleccion') {
+#      catalogo <- catalogo
+#    } else if (!input$municipio %in% 'Sin seleccion' & input$dependencia %in% 'Sin seleccion' & input$atn %in% 'Sin seleccion') {
+#      catalogo <- catalogo %>% 
+#        filter(MUNICIPIO == input$municipio)
+#    } else if (!input$municipio %in% 'Sin seleccion' & !input$dependencia %in% 'Sin seleccion' & input$atn %in% 'Sin seleccion') {
+#      catalogo <- catalogo %>% 
+#        filter(MUNICIPIO == input$municipio, INSTITUCION == input$dependencia)
+#    } else  if (!input$municipio %in% 'Sin seleccion' & !input$dependencia %in% 'Sin seleccion' & !input$atn %in% 'Sin seleccion'){
+#      catalogo <- catalogo %>% 
+#        filter(MUNICIPIO == input$municipio, INSTITUCION == input$dependencia, ATN == input$atn)
+#    }
+#    
+#  })
   
   
-  observeEvent(input$municipio, {
-    distritos <- distritos()
+#  observeEvent(input$municipio, {
+#    distritos <- distritos()
 
-    updateSelectInput(session = session,
-                      inputId = 'dependencia',
-                      label = 'Dependencia',
-                      choices = c(unique(distritos$INSTITUCION), 'Sin seleccion')# [distritos$MUNICIPIO == input$municipio]))#, selected = 'Sin seleccion'
-                      )
-    })
+#    updateSelectInput(session = session,
+#                      inputId = 'dependencia',
+#                      label = 'Dependencia',
+#                      choices = c(unique(distritos$INSTITUCION), 'Sin seleccion')# [distritos$MUNICIPIO == input$municipio]))#, selected = 'Sin seleccion'
+#                      )
+#    })
 
-  observeEvent(input$dependencia, {
-    distritos <- distritos()
+#  observeEvent(input$dependencia, {
+#    distritos <- distritos()
     
-    updateSelectInput(session = session,
-                      inputId = 'atn',
-                      label = 'Nivel de atención',
-                      choices = c(unique(distritos$ATN), 'Sin seleccion')#[distritos$INSTITUCION == input$dependencia & distritos$MUNICIPIO == input$municipio]))#, selected = 'Sin seleccion'
-    )
+#    updateSelectInput(session = session,
+#                      inputId = 'atn',
+#                      label = 'Nivel de atención',
+#                      choices = c(unique(distritos$ATN), 'Sin seleccion')#[distritos$INSTITUCION == input$dependencia & distritos$MUNICIPIO == input$municipio]))#, selected = 'Sin seleccion'
+#    )
     
     
-  })
+#  })
   
-  observeEvent(input$atn, {
-    distritos <- distritos()
+ # observeEvent(input$atn, {
+#    distritos <- distritos()
+#    
+#    updateSelectInput(session = session,
+#                      inputId = 'nom_ins',
+#                      label = 'Nombre del lugar',
+#                      choices = c(distritos$UNIDAD, 'Sin seleccion')#[distritos$INSTITUCION == input$dependencia & distritos$MUNICIPIO == input$municipio & distritos$ATN == input$atn])#, selected = 'Sin seleccion'
+#    )
     
-    updateSelectInput(session = session,
-                      inputId = 'nom_ins',
-                      label = 'Nombre del lugar',
-                      choices = c(distritos$UNIDAD, 'Sin seleccion')#[distritos$INSTITUCION == input$dependencia & distritos$MUNICIPIO == input$municipio & distritos$ATN == input$atn])#, selected = 'Sin seleccion'
-    )
     
     
-    
-  })
+#  })
   
 #  observeEvent(c(input$municipio, input$dependencia, input$atn), {
 #    distritos <- distritos()
@@ -320,11 +322,33 @@ server <- function(input, output, session) {
 #    })  
     
     
+  observeEvent(input$dependencia, {
+    distritos <- catalogo
+    
+    updateSelectInput(session = session,
+                      inputId = 'municipio',
+                      label = 'Municipio',
+                      choices = c(unique(distritos$MUNICIPIO[distritos$INSTITUCION == input$dependencia]), NULL),
+                      selected = NULL)
+    
+  })
   
-
-
-
+  observeEvent(input$municipio, {
+    municipios <- catalogo
+    
+    updateSelectInput(session = session,
+                      inputId = 'nom_ins',
+                      label = 'Nombre del lugar',
+                      choices = c(unique(municipios$UNIDAD[municipios$MUNICIPIO == input$municipio]), NULL),
+                      selected = NULL)
+    
+  })
+  
 }
+
+
+
+#}
 
 shinyApp(ui, server, options = list(host = '0.0.0.0', port = 8000))
 

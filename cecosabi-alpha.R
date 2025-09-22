@@ -357,7 +357,7 @@ n2_a <- list(
     ))
   ),
   fluidRow(
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_108', 
                     label = 'Medicina interna', 
                     value = F),   
@@ -382,7 +382,7 @@ n2_a <- list(
                   choices = c('Sí', 'No'),
                   selected = 'No'),
     )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_54', 
                     label = 'Oncología', 
                     value = F), 
@@ -407,7 +407,7 @@ n2_a <- list(
                   choices = c('Sí', 'No'),
                   selected = 'No'),
     )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_55', 
                     label = 'Ginecología y Obstetricia', 
                     value = F), 
@@ -431,31 +431,6 @@ n2_a <- list(
                   label = 'Servicio en funcionamiento',
                   choices = c('Sí', 'No'),
                   selected = 'No')  
-    )),
-    column(3, wellPanel(
-      checkboxInput(inputId = 'atn2_44', 
-                    label = 'Medicina nuclear', 
-                    value = F),  
-      checkboxGroupInput(inputId = 'atn2_44h',
-                         label = 'Horario',
-                         choices = c('Matutino', 'Vespertino', 'Nocturno', 'Jornada acumulada'),
-                         selected = 'Matutino'),              
-      numericInput(inputId = 'atn2_44me',
-                   label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
-                   value = NA_integer_),
-      numericInput(inputId = 'atn2_44m',
-                   label = '¿Cuántos médicos generales trabajan en el servicio?', 
-                   value = NA_integer_),
-      numericInput(inputId = 'atn2_44e',
-                   label = '¿Cuántos enfermeros trabajan en el servicio?', 
-                   value = NA_integer_),
-      numericInput(inputId = 'atn2_44con',
-                   label = '¿Con cuántos consultorios dispone el servicio?', 
-                   value = NA_integer_),
-      selectInput(inputId = 'atn2_44fun',
-                  label = 'Servicio en funcionamiento',
-                  choices = c('Sí', 'No'),
-                  selected = 'No') 
     ))
   ),
   fluidRow(
@@ -1678,7 +1653,7 @@ fluidRow(
     ))
   ),
   fluidRow(
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_47', 
                     label = 'Estomatología', 
                     value = F), 
@@ -1703,7 +1678,7 @@ fluidRow(
                   choices = c('Sí', 'No'),
                   selected = 'No'),        
     )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_59', 
                     label = 'Psicología', 
                     value = F), 
@@ -1719,23 +1694,7 @@ fluidRow(
                   choices = c('Sí', 'No'),
                   selected = 'No'), 
     )),
-    column(3, wellPanel(
-      checkboxInput(inputId = 'atn2_49', 
-                    label = 'Trabajo social', 
-                    value = F), 
-      checkboxGroupInput(inputId = 'atn2_49h',
-                         label = 'Horario',
-                         choices = c('Matutino', 'Vespertino', 'Nocturno', 'Jornada acumulada'),
-                         selected = 'Matutino'),
-      numericInput(inputId = 'atn2_49t',  
-                   label = 'Número de trabajadores sociales prestando el servicio', 
-                   value = NA_integer_),
-      selectInput(inputId = 'atn2_49fun',
-                  label = 'Servicio en funcionamiento',
-                  choices = c('Sí', 'No'),
-                  selected = 'No'), 
-    )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_51',
                     label = 'Asistencia especializada para consultas (asistente médico)', 
                     value = F), 
@@ -2086,8 +2045,9 @@ n2_c <- list(
                     value = F) 
     ))
   ),
+  h5(tags$b('Equipamiento')),
   fluidRow(
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_95', 
                     label = 'Torre laparoscopía', 
                     value = F), 
@@ -2106,26 +2066,7 @@ n2_c <- list(
                   choices = c('Sí', 'No'),
                   selected = 'No')
     )),
-    column(3, wellPanel(
-      checkboxInput(inputId = 'atn2_96', 
-                    label = 'Equipamiento de medicina nuclear', 
-                    value = F), 
-      selectInput(inputId = 'atn2_96sr', 
-                  label = '¿El equipo es propio de la institución?)', 
-                  choices = c('Si', 'No', 'Subrrogado', 'NA'), 
-                  selected = 'NA'),                
-      numericInput(inputId = 'atn2_96fu', 
-                   label = '¿Cuánto equipo es funcional?',
-                   value = NA_integer_), 
-      numericInput(inputId = 'atn2_96nf', 
-                   label = '¿Cuánto equipo no es funcional?',
-                   value = NA_integer_),
-      selectInput(inputId = 'atn2_96fun',
-                  label = 'Servicio en funcionamiento',
-                  choices = c('Sí', 'No'),
-                  selected = 'No'),
-    )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_97', 
                     label = 'Monitores de signos vitales', 
                     value = F),
@@ -2136,7 +2077,7 @@ n2_c <- list(
                    label = '¿Cuánto equipo no es funcional?',
                    value = NA_integer_)
     )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn2_98', 
                     label = 'Carro rojo', 
                     value = F), 
@@ -2663,23 +2604,7 @@ n3_a <- list(
     ))
   ),
   fluidRow(
-    column(3, wellPanel(
-      checkboxInput(inputId = 'atn3_46', 
-                    label = 'Oncología médica',     
-                    value = F),
-      checkboxGroupInput(inputId = 'atn3_46h',
-                         label = 'Horario',
-                         choices = c('Matutino', 'Vespertino', 'Nocturno', 'Jornada acumulada'),
-                         selected = 'Matutino'),              
-      numericInput(inputId = 'atn3_46a',
-                   label = '¿Cuántos especialistas trabajan en el servicio?', 
-                   value = NA_integer_),
-      selectInput(inputId = 'atn3_46fun',
-                  label = 'Servicio en funcionamiento',
-                  choices = c('Sí', 'No'),
-                  selected = 'No'),   
-    )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn3_47', 
                     label = 'Oncología quirúrgica',     
                     value = F),
@@ -2695,7 +2620,7 @@ n3_a <- list(
                   choices = c('Sí', 'No'),
                   selected = 'No'), 
     )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn3_48', 
                     label = 'Oncología pediátrica',     
                     value = F),
@@ -2711,7 +2636,7 @@ n3_a <- list(
                   choices = c('Sí', 'No'),
                   selected = 'No'),
     )),
-    column(3, wellPanel(
+    column(4, wellPanel(
       checkboxInput(inputId = 'atn3_50', 
                     label = 'Radio-oncología',     
                     value = F),
@@ -2795,7 +2720,7 @@ n3_a <- list(
     ))
   ),
   fluidRow(
-    column(6, wellPanel(
+    column(3, wellPanel(
       checkboxInput(inputId = 'atn3_60', 
                     label = 'Ortodoncia',     
                     value = F),
@@ -2811,7 +2736,7 @@ n3_a <- list(
                   choices = c('Sí', 'No'),
                   selected = 'No'),   
     )),
-    column(6, wellPanel(
+    column(3, wellPanel(
       checkboxInput(inputId = 'atn3_61', 
                     label = 'Terapia endovascular',     
                     value = F),
@@ -2826,6 +2751,31 @@ n3_a <- list(
                   label = 'Servicio en funcionamiento',
                   choices = c('Sí', 'No'),
                   selected = 'No'),     
+    )),
+    column(3, wellPanel(
+      checkboxInput(inputId = 'atn2_44', 
+                    label = 'Medicina nuclear', 
+                    value = F),  
+      checkboxGroupInput(inputId = 'atn2_44h',
+                         label = 'Horario',
+                         choices = c('Matutino', 'Vespertino', 'Nocturno', 'Jornada acumulada'),
+                         selected = 'Matutino'),              
+      numericInput(inputId = 'atn2_44me',
+                   label = '¿Cuántos médicos especialistas trabajan en el servicio?', 
+                   value = NA_integer_),
+      numericInput(inputId = 'atn2_44m',
+                   label = '¿Cuántos médicos generales trabajan en el servicio?', 
+                   value = NA_integer_),
+      numericInput(inputId = 'atn2_44e',
+                   label = '¿Cuántos enfermeros trabajan en el servicio?', 
+                   value = NA_integer_),
+      numericInput(inputId = 'atn2_44con',
+                   label = '¿Con cuántos consultorios dispone el servicio?', 
+                   value = NA_integer_),
+      selectInput(inputId = 'atn2_44fun',
+                  label = 'Servicio en funcionamiento',
+                  choices = c('Sí', 'No'),
+                  selected = 'No') 
     ))
   )
   )
@@ -2902,9 +2852,6 @@ n3_b <- list(
                     value = F),
       checkboxInput(inputId = 'atn3_68', 
                     label = 'Sistema de historia clínica electrónica', 
-                    value = F),
-      checkboxInput(inputId = 'atn3_03', 
-                    label = 'Capilla o espacio espiritual', 
                     value = F)
     ))
   ),
@@ -3275,7 +3222,26 @@ n3_c <- list(
       numericInput(inputId = 'atn3_72nf', 
                    label = '¿Cuánto equipo no es funcional?',
                    value = NA_integer_)
-    ))
+    )),
+    column(4, wellPanel(
+      checkboxInput(inputId = 'atn2_96', 
+                    label = 'Equipamiento de medicina nuclear', 
+                    value = F), 
+      selectInput(inputId = 'atn2_96sr', 
+                  label = '¿El equipo es propio de la institución?)', 
+                  choices = c('Si', 'No', 'Subrrogado', 'NA'), 
+                  selected = 'NA'),                
+      numericInput(inputId = 'atn2_96fu', 
+                   label = '¿Cuánto equipo es funcional?',
+                   value = NA_integer_), 
+      numericInput(inputId = 'atn2_96nf', 
+                   label = '¿Cuánto equipo no es funcional?',
+                   value = NA_integer_),
+      selectInput(inputId = 'atn2_96fun',
+                  label = 'Servicio en funcionamiento',
+                  choices = c('Sí', 'No'),
+                  selected = 'No'),
+    )),
   )
 )
 
