@@ -49,18 +49,18 @@ catalogo <- read_rds('clues.rds')
 
 #gs4_auth(path = "zippy-acronym-328605-937daf22dbd8.json", email = "captura-2@zippy-acronym-328605.iam.gserviceaccount.com", cache = "secrets")
 
-SHEET_ID <- '1WNVXuo_tJNkSiABswhOtUvUUC9y--ZV74bUWP5UYHow'
+##SHEET_ID <- '1WNVXuo_tJNkSiABswhOtUvUUC9y--ZV74bUWP5UYHow'
 
 # Code to save new responses: ----
-saveData <- function(data) {
-  data <- data %>% as.list() %>% data.frame()
-  sheet_append(SHEET_ID, data)
-}
+##saveData <- function(data) {
+##  data <- data %>% as.list() %>% data.frame()
+##  sheet_append(SHEET_ID, data)
+##}
 
 # Code to read all responses: ----
-loadData <- function() {
-  read_sheet(SHEET_ID)
-}
+##loadData <- function() {
+##  read_sheet(SHEET_ID)
+##}
 
 labelMandatory <- function(label) {
   tagList(
@@ -69,7 +69,7 @@ labelMandatory <- function(label) {
   )
 }
 
-fieldsMandatory <- c('AREA',	'FECHA', 'DISTRITO',	'MUNICIPIO', 	'LOCALIDAD',	'MOTIVO',	'TIPO')
+fieldsMandatory <- c('nombre', 'municipio')
 
 appCSS <-
   ".mandatory_star { color: red; }
@@ -210,6 +210,11 @@ server <- function(input, output, session) {
     shinyjs::show("submit_msg")
     shinyjs::hide("error")
 
+    nombre <- input$nombre
+    dependencia <- input$dependencia
+    datos_pru <- data.frame(nombre = nombre, dependencia = dependencia)
+    DBI::dbExecute(conn = db, DBI::sqlAppendTable(name = 'prueba', value = datos_pru, row.names = FALSE)) #el overwrite te borra todos los registros
+    
     tryCatch({
       saveData(formData())
       shinyjs::reset("form")
@@ -343,6 +348,10 @@ server <- function(input, output, session) {
                       selected = NULL)
     
   })
+  
+  
+  
+  
   
 }
 
